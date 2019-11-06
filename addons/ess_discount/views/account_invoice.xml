@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<!-- Update account invoice list view!-->
+        <record model="ir.ui.view" id="np_discount_account_invoice_tree">
+            <field name="name">Account Invoice</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="np_account.invoice_tree_inherit"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='amount_untaxed']" position="after">
+						<field name="total_before_discount"  sum="Total Doc Amt" string="Doc Amt"
+							   invisible="1"/>
+						<!--<field name="amount_total" sum="Total Amt" string="Total Amt" invisible="1"/>-->
+                   		<!--<field name="residual" sum="Residual Amount" string="Bal Amt" invisible="1"/>-->
+						<!--<field name="total_before_discount_display" sum="Total Before Discount" string="Doc Amt"-->
+                           <!--invisible="context.get('type', False) not in ['out_invoice']"/>-->
+						<field name="test_amount_tax" sum="Total Tax" string="7% GST"/>
+                    	<field name="ws_discount_amount" sum="Total Discount" string="Discount Amt"/>
+						<!--<field name="ws_discount_amount_display" sum="Total Discount" string="Discount Amt"/>-->
+						<!--<field name="base_residual" sum="Base Bal Amt" string='Base Bal Amt' invisible="1"/>-->
+						<field name="test_total_amt" sum="Total Amt" string="Total Amt"/>
+                    	<field name="residual" sum="Bal Amt" string="Bal Amt" invisible="1"/>
+						<field name="base_residual" sum="Base Bal Amt" string='Base Bal Amt' invisible="1"/>
+                	    <field name="test_residual" sum="Residual Amount" string="Bal Amt"/>
+						<field name="test_base_residual" sum="Base Bal Amt" string='Base Bal Amt'/>
+                    </xpath>
+					<xpath expr="//field[@name='amount_untaxed']" position="replace">
+						<field name="test_amount_untaxed" sum="Total Untaxed" string="Untaxed Amount"/>
+					</xpath>
+                </data>
+            </field>
+        </record>
+
+		<record id="inherit_view_account_invoice_gtss" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<!--<xpath expr="//field[@name='invoice_line']" position="after">-->
+					<!--<field name="flag_discount" invisible="1" readonly="0"/>-->
+					<!--&lt;!&ndash;<label for="discount_rate" string="Discount Total" attrs="{'invisible': [('flag_discount','=',False)]}"/>&ndash;&gt;-->
+					<!--<div >-->
+						<!--<field name="discount_rate" attrs="{'invisible': [('flag_discount','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>-->
+					<!--</div>-->
+				<!--</xpath>-->
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="total_before_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+					<field name="discount_amount"/>
+				</xpath>
+				<!--<xpath expr="//field[@name='amount_untaxed']" position="attributes">-->
+				   <!--<attribute name="string">Subtotal after discount</attribute>-->
+			   <!--</xpath>-->
+                <xpath expr="//field[@name='invoice_line']" position="after">
+                    <button name="%(action_sale_global_discount_wizard_form)d"
+						string="Set Global Discount" type="action"
+						attrs="{'invisible':[('state','in',['done','cancel'])]}"
+						groups="product.group_discount_per_so_line"/>
+					<br></br>
+					<!--<group>-->
+
+					<group attrs="{'invisible': [('ws_discount_type', '=', False)]}">
+						<field name="ws_discount_type"/>
+						<field name="ws_discount_amount" attrs="{'invisible': [('ws_discount_type', '=', 'percent')]}"/>
+						<field name="ws_discount_percent" attrs="{'invisible': [('ws_discount_type', '=', 'amount')]}"/>
+					</group>
+                </xpath>
+			</field>
+		</record>
+
+		<record id="inherit_invoice_supplier_form" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+				<!--<xpath expr="//field[@name='invoice_line']" position="after">-->
+					<!--<field name="flag_discount" invisible="1" readonly="0"/>-->
+					<!--<label for="discount_rate" string="Discount Total" attrs="{'invisible': [('flag_discount','=',False)]}"/>-->
+					<!--<div >-->
+						<!--<field name="discount_rate" attrs="{'invisible': [('flag_discount','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>-->
+					<!--</div>-->
+				<!--</xpath>-->
+				<xpath expr="//field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='invoice_line']/tree/field[@name='discount']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<!--<xpath expr="//field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="before">-->
+					<!--<field name="total_bf_discount"/>-->
+				<!--</xpath>-->
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+				</xpath>
+
+		</field>
+		</record>
+
+		<record id="inherit_view_np_account_invoice" model="ir.ui.view">
+			<field name="name">account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="np_sale.np_invoice_form"/>
+			<field name="arch" type="xml">
+				<!--<xpath expr="//field[@name='invoice_line']" position="after">-->
+					<!--<field name="flag_discount" invisible="1" readonly="0"/>-->
+					<!--<label for="discount_rate" string="Discount Total"/>-->
+					<!--<div >-->
+						<!--<field name="discount_rate" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>-->
+					<!--</div>-->
+				<!--</xpath>-->
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+				</xpath>
+				<!--<xpath expr="//field[@name='amount_untaxed']" position="attributes">-->
+				   <!--<attribute name="string">Subtotal after discount</attribute>-->
+			   <!--</xpath>-->
+				<xpath expr="//field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<!--<xpath expr="//field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="before">-->
+					<!--<field name="total_bf_discount"/>-->
+				<!--</xpath>-->
+		</field>
+		</record>
+
+		<record id="account.action_invoice_tree1" model="ir.actions.act_window">
+			<field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'need_recompute_discount': 1}</field>
+		</record>
+		<record id="account.action_invoice_tree2" model="ir.actions.act_window">
+			<field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase', 'need_recompute_discount': 1}</field>
+		</record>
+		<record id="account.action_invoice_tree3" model="ir.actions.act_window">
+			<field name="context">{'default_type':'out_refund', 'type':'out_refund', 'journal_type': 'sale_refund', 'need_recompute_discount': 1}</field>
+		</record>
+		<record id="account.action_invoice_tree4" model="ir.actions.act_window">
+			<field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund', 'need_recompute_discount': 1}</field>
+		</record>
+	</data>
+</openerp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="np_account_settings_discount_account_view" model="ir.ui.view">
+            <field name="name">Add Discount Account Settings</field>
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[4]/div[2]" position="inside">
+                    <div>
+                        <group>
+                            <group>
+                                <field name="discount_account_config"/>
+                            </group>
+                            <group></group>
+                        </group>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

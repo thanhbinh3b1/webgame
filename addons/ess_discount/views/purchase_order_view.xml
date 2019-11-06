@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="purchase_order_pricelist_form_view_inh">
+			<field name="name">purchase.order.pricelist.form.inh</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='order_line']" position="after">
+					<button name="%(action_sale_global_discount_wizard_form)d"
+						string="Set Global Discount" type="action"
+						attrs="{'invisible':[('state','not in',['draft','sent','verify'])]}"
+						groups="product.group_discount_per_so_line"/>
+					<br></br>
+
+					<group attrs="{'invisible': [('ws_discount_type', '=', False)]}">
+						<field name="ws_discount_type"/>
+						<field name="ws_discount_amount" attrs="{'invisible': [('ws_discount_type', '=', 'percent')]}"/>
+						<field name="ws_discount_percent" attrs="{'invisible': [('ws_discount_type', '=', 'amount')]}"/>
+					</group>
+				</xpath>
+				<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+
+					<field name="ws_discount" invisible="1"/>
+					<field name="discount" />
+				</xpath>
+
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="total_before_discount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+					<field name="discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="purchase.purchase_rfq" model="ir.actions.act_window">
+			<field name="context">{'need_recompute_discount': True}</field>
+		</record>
+
+
+	</data>
+</openerp>

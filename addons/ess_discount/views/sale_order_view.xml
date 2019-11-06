@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="sale_order_pricelist_form_view_inh">
+			<field name="name">sale.order.pricelist.form.inh</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='order_line']" position="after">
+					<button name="%(action_sale_global_discount_wizard_form)d"
+						string="Set Global Discount" type="action"
+						groups="product.group_discount_per_so_line"/>
+
+					<br></br>
+
+					<group attrs="{'invisible': [('ws_discount_type', '=', False)]}">
+						<field name="ws_discount_type" force_write="1"/>
+						<field name="ws_discount_amount" attrs="{'invisible': [('ws_discount_type', '=', 'percent')]}" force_write="1"/>
+						<field name="ws_discount_percent" attrs="{'invisible': [('ws_discount_type', '=', 'amount')]}" force_write="1"/>
+					</group>
+				</xpath>
+				<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+					<field name="ws_discount" invisible="1"/>
+				</xpath>
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="total_before_discount" widget="monetary" options="{'currency_field': 'currency_id'}"
+					readonly="1"/>
+					<field name="amount_discount"/>
+				</xpath>
+			</field>
+		</record>
+		<record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+				<xpath expr="//page[@name='sales_purchases']" position="after">
+					<page name="discount" string="Global Discount">
+						<group>
+							<field name="partner_discount_type"/>
+							<field name="partner_discount"/>
+						</group>
+					</page>
+				</xpath>
+
+			</field>
+		</record>
+
+		<record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+			<field name="context">{'search_default_my_sale_orders_filter': 1, 'need_recompute_discount': 1}</field>
+		</record>
+	</data>
+</openerp>
