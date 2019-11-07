@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="rent_pricelist_tree" model="ir.ui.view">
+            <field name="name">rent.pricelist.tree</field>
+            <field name="model">rent.pricelist</field>
+            <field name="arch" type="xml">
+                <tree string="Rent Price">
+                    <field name="name"/>
+                    <field name="rent_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rent_pricelist_form" model="ir.ui.view">
+            <field name="name">rent.pricelist.form</field>
+            <field name="model">rent.pricelist</field>
+            <field name="arch" type="xml">
+                <form string="Rent Price">
+                    <group>
+                        <field name="name"/>
+                        <field name="rent_type"/>
+                    </group>
+                    <notebook>
+                        <page>
+                            <field
+                                name="rent_detail"
+                                widget="section_and_note_one2many"
+                                mode="tree,kanban"
+                            >
+                                <tree editable="bottom">
+                                    <field name="from_day"/>
+                                    <field name="to_day"/>
+                                    <field name="price"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rent_pricelist" model="ir.actions.act_window">
+            <field name="name">Rent Price</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rent.pricelist</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="search_view_id" ref="sale_order_view_search_inherit_sale"/>-->
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        <menuitem id="action_rent_pricelist_menu" action="action_rent_pricelist"
+                  parent="sale.menu_sales_config" sequence="1"
+                  name="Rent Price"/>
+
+
+    </data>
+</odoo>
