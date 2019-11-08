@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <record id="rent_cash_tree" model="ir.ui.view">
+            <field name="name">rent.cash.tree</field>
+            <field name="model">rent.cash</field>
+            <field name="arch" type="xml">
+                <tree string="Rent Cash">
+                    <field name="cash_type"/>
+                    <field name="cash"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rent_cash_form" model="ir.ui.view">
+            <field name="name">rent.cash.form</field>
+            <field name="model">rent.cash</field>
+            <field name="arch" type="xml">
+                <form string="Rent Cash">
+                    <group>
+                        <field name="cash"/>
+                    </group>
+                    <footer invisible="not context.get('from_sale', False)">
+                        <button name="save_payment" string="Save" type="ọbject" />
+                    </footer>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="action_cash" model="ir.actions.act_window">
+            <field name="name">Rent Cash</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rent.cash</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <record id="action_cash_sale_order" model="ir.actions.act_window">
+            <field name="name">Rent Cash</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rent.cash</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="domain">[]</field>
+        </record>
+        <menuitem id="root_rent_cash_menu"
+                  name="Cash"/>
+
+        <menuitem id="action_rent_cash_menu" action="action_cash"
+                  parent="root_rent_cash_menu" sequence="1"
+                  name="Rent Price"/>
+
+
+    </data>
+</odoo>
