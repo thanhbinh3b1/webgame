@@ -9,7 +9,31 @@
                     <field name="end_date" required="1" />
                     <field name="date_rent" readonly="1" />
                 </field>
+
+                <field name="amount_total" position="after">
+                    <field name="cash_outstanding" readonly="1" />
+                </field>
+                <page name="other_information" position="after">
+                    <page name="cash" string="Payment">
+                        <field name="cash_detail" readonly="1">
+                            <tree>
+                                <field name="cash_type"/>
+                                <field name="cash"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+                 <button name="%(sale.action_view_sale_advance_payment_inv)d"  context="{'default_advance_payment_method': 'percentage'}"
+                         position="replace">
+                     <button name="open_payment" string="Payment"
+                        type="object"
+                        attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '=', 'done')]}"/>
+                </button>
+                <button name="%(sale.action_view_sale_advance_payment_inv)d"
+                         position="replace">
+                </button>
             </field>
+
         </record>
     </data>
 </odoo>
