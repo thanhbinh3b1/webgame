@@ -31,7 +31,7 @@ class ESSSaleOrderDiscount(models.Model):
     def _compute_all_price(self):
         for r in self:
             r.amount_tax = sum([line.price_tax for line in r.order_line])
-            r.amount_untaxed = sum([line.price_subtotal - line.ws_discount for line in r.order_line])
+            r.amount_untaxed = sum([line.price_subtotal - line.ws_discount - line.discount_amount_line for line in r.order_line])
             r.total_before_discount = sum([line.price_subtotal for line in r.order_line])
             r.amount_total = r.amount_untaxed + r.amount_tax
             r.amount_discount = r.total_before_discount - r.amount_untaxed
@@ -48,7 +48,7 @@ class ESSSaleOrderDiscount(models.Model):
         for order in self:
             amount_untaxed = amount_tax = 0.0
             for line in order.order_line:
-                amount_untaxed += line.price_subtotal - line.ws_discount
+                amount_untaxed += line.price_subtotal - line.ws_discount  - line.discount_amount_line
                 amount_tax += line.price_tax
             order.update({
                 'amount_untaxed': amount_untaxed,
@@ -97,45 +97,32 @@ class ESSSaleOrderDiscount(models.Model):
 class ESSSaleLineDiscount(models.Model):
     _inherit = 'sale.order.line'
 
-    @api.onchange('item_type')
-    def onchange_item_type(self):
-        for r in self:
-            if r.item_type == 'foc':
-                r.price_unit = 0.00
-
     @api.depends('discount', 'price_unit', 'product_uom_qty')
     def _compute_all_price(self):
         for r in self:
-            # r.price_subtotal_discount_line = r.price_unit * r.product_uom_qty * (1 - r.discount / 100)
-            r.discount_amount_line = r.price_unit * r.product_uom_qty * r.discount / 100
-            # r.price_subtotal = self._calc_line_base_price(r) * r.product_uom_qty - r.ws_discount
-            # r.tax_amount = sum([tax['amount'] for tax in r.tax_id.compute_all(r.price_subtotal, 1,
-            #                                                                   r.order_id.partner_id)['taxes']])
+            r.discount_amount_line = r.price_unit * r.product_uom_qty * r.discount / 100 + r.discount_amount_manual
 
     @api.depends('ws_discount', 'discount_amount_line')
     def _compute_discount_price(self):
         for r in self:
-            r.discount_amount = r.ws_discount + r.discount_amount_line
+            r.discount_amount = r.ws_discount + r.discount_amount_line + r.discount_amount_manual
 
-    # discount = fields.Float(digits=dp.get_precision('Discount'))
-    # total_bf_discount = fields.Float(compute="_amount_line_discount",
-    #                                  string='Subtotal1', digits_compute=dp.get_precision('Account'))
-    # show_discount = fields.Float(digits=(12, 6), string='Discount')
-
+    discount_type = fields.Selection([('amount', 'By Amount'), ('percent', 'By %')], string='Discount Type')
+    discount_amount_manual = fields.Float('Discount $', default=0)
     discount_amount = fields.Float(string='Discount Amount', compute='_compute_discount_price',
                                    store=False, digits=dp.get_precision('Account'))
     discount_amount_line = fields.Float(string='Discount Amount', compute='_compute_all_price',
                                         store=False, digits=dp.get_precision('Account'))
-    # price_subtotal = fields.Float(string='Subtotal', compute='_compute_all_price',
-    #                               digits=dp.get_precision('Account'),
-    #                               help='The Amount after discount on line and whole bill', store=False)
     ws_discount = fields.Float(string='Whole Sale Discount Amount on Line')
-    # price_subtotal_discount_line = fields.Float(string='Price Subtotal', digits=dp.get_precision('Account'),
-    #                                             compute='_compute_all_price',
-    #                                             help="The Amount after discount on line", store=False)
     tax_amount = fields.Float(string='Taxed Amount', digits=dp.get_precision('Account'), compute='_compute_all_price',
                               help='The Tax Amount base on price_subtotal_after_ws_discount', store=False)
 
+    @api.onchange('discount_type')
+    def onchange_discount_type(self):
+        if self.discount_type == 'amount':
+            self.discount = 0
+        else:
+            self.discount_amount_manual = 0
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
         """
@@ -156,39 +143,7 @@ class ESSSaleLineDiscount(models.Model):
 
     @api.model
     def _calc_line_base_price(self):
-        return self.price_unit * (1 - (self.discount or 0.0) / 100.0)
-    # def _amount_line(self, cr, uid, ids, field_name, arg, context=None):
-    #     tax_obj = self.pool.get('account.tax')
-    #     cur_obj = self.pool.get('res.currency')
-    #     res = {}
-    #     if context is None:
-    #         context = {}
-    #     for line in self.browse(cr, uid, ids, context=context):
-    #         price = self._calc_line_base_price(cr, uid, line, context=context)
-    #         qty = self._calc_line_quantity(cr, uid, line, context=context)
-    #         taxes = tax_obj.compute_all(cr, uid, line.tax_id, price * qty - line.ws_discount, 1,
-    #                                     line.product_id,
-    #                                     line.order_id.partner_id)
-    #         cur = line.order_id.pricelist_id.currency_id
-    #         res[line.id] = cur_obj.round(cr, uid, cur, taxes['total'])
-    #     return res
-    #
-    # _columns = {
-    #     'price_subtotal': old_fields.function(_amount_line, string='Subtotal',
-    #                                           digits_compute=dp.get_precision('Account')),
-    # }
-
-    # def _prepare_order_line_proforma_invoice_line(self):
-    #     self.ensure_one()
-    #     res = super(NpStockPicking, self)._prepare_order_line_proforma_invoice_line()
-    #     res.update(ws_discount=self.ws_discount)
-    #     return res
-    #
-    # @api.model
-    # def _prepare_order_line_invoice_line(self, line, account_id=False):
-    #     res = super(NpStockPicking, self)._prepare_order_line_invoice_line(line, account_id)
-    #     res.update(sale_line_id=line.id)
-    #     return res
+        return self.price_unit * (1 - (self.discount or 0.0) / 100.0) - self.discount_amount_manual
 
 
 class NpPartner(models.Model):

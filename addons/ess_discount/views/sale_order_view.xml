@@ -23,6 +23,17 @@
 				<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
 					<field name="ws_discount" invisible="1"/>
 				</xpath>
+				<xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="replace">
+					<field name="discount_type" />
+
+					<field name="discount_amount_manual"
+						   string="Disc.$" groups="product.group_discount_per_so_line" optional="show"
+						   attrs="{'invisible': [('discount_type', 'in', ('percent', False))]}" />
+					<field name="discount" string="Disc.%"
+						   groups="product.group_discount_per_so_line" optional="show"
+						   attrs="{'invisible': [('discount_type', '!=', 'percent')]}" />
+
+				</xpath>
 				<xpath expr="//field[@name='amount_untaxed']" position="before">
 					<field name="total_before_discount" widget="monetary" options="{'currency_field': 'currency_id'}"
 					readonly="1"/>

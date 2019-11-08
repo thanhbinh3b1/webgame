@@ -9,6 +9,7 @@ class saleOrder(models.Model):
     date_rent = fields.Integer('Days', compute='calculate_days')
     cash_detail = fields.One2many('rent.cash', 'sale_id')
     cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount')
+    cash_in = fields.Float(string=_('Cash In'), compute='total_balance_amount')
 
     @api.depends('end_date')
     def calculate_days(self):
@@ -23,6 +24,7 @@ class saleOrder(models.Model):
             r.cash_outstanding = r.amount_total
             payment = sum(r.cash_detail.mapped('cash') or [0])
             r.cash_outstanding = r.amount_total - payment
+            r.cash_in = sum([r.cash if r.cash > 0 else 0 for r in r.cash_detail] or [0])
 
     def open_payment(self):
         return {
