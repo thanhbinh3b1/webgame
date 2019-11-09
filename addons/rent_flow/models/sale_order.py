@@ -1,5 +1,6 @@
 # __author__ = 'BinhTT'
 from odoo import fields, api, models, _
+import odoo.addons.decimal_precision as dp
 
 
 class saleOrder(models.Model):
@@ -8,8 +9,18 @@ class saleOrder(models.Model):
     end_date = fields.Date(string='End Date')
     date_rent = fields.Integer('Days', compute='calculate_days')
     cash_detail = fields.One2many('rent.cash', 'sale_id')
-    cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount')
-    cash_in = fields.Float(string=_('Cash In'), compute='total_balance_amount')
+    cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount', digits=dp.get_precision('Account'))
+    cash_in = fields.Float(string=_('Cash In'), compute='total_balance_amount', digits=dp.get_precision('Account'))
+    partner_invoice_id = fields.Many2one(required=False)
+    partner_shipping_id = fields.Many2one(required=False)
+
+    pricelist_id = fields.Many2one(required=False)
+    currency_id = fields.Many2one(related='company_id.currency_id',
+                                  required=True)
+
+    @api.depends('order_line')
+    def _compute_delivery_state(self):
+            self.delivery_set = True
 
     @api.depends('end_date')
     def calculate_days(self):

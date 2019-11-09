@@ -6,7 +6,7 @@ class RentPriceList(models.Model):
     _name = 'rent.pricelist'
 
     name = fields.Char('Name')
-    rent_type = fields.Selection([('1', '1'), ('2', '2'), ('3', '3')], string='Loai')
+    rent_type = fields.Many2one('rent.product.type', string='Loai')
     rent_detail = fields.One2many('rent.pricelist.detail', 'rent_price_id')
 
 

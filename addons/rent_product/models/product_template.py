@@ -5,7 +5,7 @@ from odoo import fields, api, models
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    rent_type = fields.Selection([('1', '1'), ('2', '2'), ('3', '3')], string='Loai')
+    rent_type = fields.Many2one('rent.product.type', string='Loai')
 
     @api.model
     def create(self, vals):

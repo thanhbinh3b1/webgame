@@ -12,6 +12,8 @@
     'data': [
         'views/product_category.xml',
         'views/product_template.xml',
+        'views/rent_type.xml',
+
     ],
 
     'installable': True,
