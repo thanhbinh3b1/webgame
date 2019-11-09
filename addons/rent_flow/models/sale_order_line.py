@@ -4,7 +4,7 @@ from odoo import fields, api, models, _
 
 class saleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-    is_delivery = fields.Boolean(string="Is a Delivery", default=True)
+    is_delivery = fields.Boolean(string="Is a Delivery", default=False)
 
 
     @api.onchange('product_id')
