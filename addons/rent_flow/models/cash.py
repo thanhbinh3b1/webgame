@@ -11,3 +11,10 @@ class RentCash(models.Model):
 
     def save_payment(self):
         return {'type': 'ir.actions.act_window_close'}
+
+    @api.model
+    def create(self, vals):
+        if vals.get('cash_type') == 'out':
+            vals.update({'cash': vals.get('cash', 0) * -1})
+        res = super(RentCash, self).create(vals)
+        return res

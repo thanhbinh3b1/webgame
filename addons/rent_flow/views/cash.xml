@@ -17,6 +17,7 @@
             <field name="arch" type="xml">
                 <form string="Rent Cash">
                     <group>
+                        <field name="cash_type" required="context.get('from_sale', False)"/>
                         <field name="cash"/>
                     </group>
                     <footer invisible="not context.get('from_sale', False)">
