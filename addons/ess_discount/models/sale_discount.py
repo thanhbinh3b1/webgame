@@ -108,7 +108,8 @@ class ESSSaleLineDiscount(models.Model):
             r.discount_amount = r.ws_discount + r.discount_amount_line + r.discount_amount_manual
 
     discount_type = fields.Selection([('amount', 'By Amount'), ('percent', 'By %')], string='Discount Type')
-    discount_amount_manual = fields.Float('Discount $', default=0)
+    discount_amount_manual = fields.Float('Discount $', default=0,
+                                          digits=dp.get_precision('Account'))
     discount_amount = fields.Float(string='Discount Amount', compute='_compute_discount_price',
                                    store=False, digits=dp.get_precision('Account'))
     discount_amount_line = fields.Float(string='Discount Amount', compute='_compute_all_price',
