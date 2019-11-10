@@ -45,6 +45,7 @@ class saleOrder(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'context': {'default_sale_id': self.id,
+                        'from_name': self.name,
                         'from_sale': True},
             'nodestroy': True,
         }

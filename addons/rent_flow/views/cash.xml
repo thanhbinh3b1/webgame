@@ -6,7 +6,8 @@
             <field name="arch" type="xml">
                 <tree string="Rent Cash">
                     <field name="cash_type"/>
-                    <field name="cash"/>
+                    <field name="cash" sum="Total Cash"/>
+                    <field name="reason"/>
                 </tree>
             </field>
         </record>
@@ -19,9 +20,10 @@
                     <group>
                         <field name="cash_type" required="context.get('from_sale', False)"/>
                         <field name="cash"/>
+                        <field name="reason"  invisible="context.get('from_sale', False)"/>
                     </group>
                     <footer invisible="not context.get('from_sale', False)">
-                        <button name="save_payment" string="Save" type="ọbject" />
+                        <button name="save_payment" string="Save" type="object"/>
                     </footer>
                 </form>
 
