@@ -31,7 +31,7 @@ class EssPurchaseDiscount(models.Model):
     ws_discount_percent = fields.Float(string='Whole Bill Discount (%)', digits=dp.get_precision('Discount'),
                                        readonly=True)
 
-    discount_amount = fields.Float(compute='_compute_all_price')
+    discount_amount = fields.Float(compute='_compute_all_price', digits=dp.get_precision('Account'))
     amount_untaxed = fields.Float(compute='_compute_all_price')
     amount_tax = fields.Float(compute='_compute_all_price')
     amount_total = fields.Float(compute='_compute_all_price')
@@ -77,7 +77,7 @@ class NpPurchaseLine(models.Model):
         for r in self:
             r.final_price_unit = (r.price_unit * r.product_qty * (1 - r.discount / 100) - r.ws_discount) /r.product_qty
 
-    discount = fields.Float(string='Discount (%)', igits=dp.get_precision('Discount'),
+    discount = fields.Float(string='Discount (%)', digits=dp.get_precision('Discount'),
                             readonly=True, states={'draft': [('readonly', False)]})
 
     discount_amount = fields.Float(string='Discount Amount', compute='_compute_discount_price',

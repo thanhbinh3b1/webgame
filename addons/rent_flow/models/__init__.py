@@ -2,4 +2,5 @@
 from . import \
     sale_order,\
     rent_pricelist, \
-    sale_order_line, cash
+    sale_order_line, cash, \
+    purchase_order, delivery

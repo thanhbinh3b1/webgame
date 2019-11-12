@@ -13,6 +13,7 @@
         'security/ir.model.access.csv',
         'views/cash.xml',
         'views/sale_order.xml',
+        'views/purchase_order.xml',
         'views/rent_pricelist.xml',
     ],
 
