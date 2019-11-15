@@ -8,20 +8,20 @@ import odoo.addons.decimal_precision as dp
 class ESSSaleOrderDiscount(models.Model):
     _inherit = 'sale.order'
 
-    def onchange_partner_id(self, part):
-        data = super(ESSSaleOrderDiscount, self).onchange_partner_id(part)
-        partner = self.env['res.partner'].browse(part)
+    def onchange_partner_id(self):
+        data = super(ESSSaleOrderDiscount, self).onchange_partner_id()
+        partner = self.partner_id
 
         if partner.partner_discount_type != 'none':
-            data['value'].update({'ws_discount_type': partner.partner_discount_type})
+            self.update({'ws_discount_type': partner.partner_discount_type})
             if partner.partner_discount_type == 'percent':
-                data['value'].update({'ws_discount_percent': partner.partner_discount,
+                self.update({'ws_discount_percent': partner.partner_discount,
                                       'ws_discount_amount': 0})
             else:
-                data['value'].update({'ws_discount_amount': partner.partner_discount,
+                self.update({'ws_discount_amount': partner.partner_discount,
                                       'ws_discount_percent': 0})
         else:
-            data['value'].update({'ws_discount_type': False,
+            self.update({'ws_discount_type': False,
                                   'ws_discount_percent': 0,
                                   'ws_discount_amount': 0})
 
