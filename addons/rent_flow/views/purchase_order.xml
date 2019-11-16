@@ -12,6 +12,7 @@
                             name="action_open_delivery_wizard"
                             context="{'carrier_recompute':True}"
                             type="object"
+							attrs="{'invisible':[('state','not in',['draft','sent','verify'])]}"
                             class="text-warning btn-secondary"
                         />
                     </div>
