@@ -73,7 +73,35 @@
                 </tree>
 
             </field>
+        </record>
 
+        <record id="rent_view_order_line_tree" model="ir.ui.view">
+            <field name="name">sale.order.line.tree</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Order Lines" create="false">
+                    <field name="order_id"/>
+                    <field name="order_partner_id"/>
+                    <field name="name"/>
+                    <field name="product_uom_qty" string="Qty"/>
+                    <field name="date_order"/>
+                    <field name="end_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rent_view_sales_order_line_filter" model="ir.ui.view">
+            <field name="name">sale.order.line.select</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//filter[@name='my_sales_order_lines']" position="after">
+                    <filter string="Sales" name="sale_state" domain="[('state','=', 'sale')]" />
+                </xpath>
+
+            </field>
         </record>
     </data>
 </odoo>

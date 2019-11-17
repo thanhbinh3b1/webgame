@@ -9,6 +9,7 @@ class RentCash(models.Model):
     cash_type = fields.Selection([('in', _('Cash In')), ('out', _('Cash Out'))])
     cash = fields.Float('$', digits=dp.get_precision('Account'),)
     sale_id = fields.Many2one('sale.order')
+    purchase_id = fields.Many2one('purchase.order')
     reason = fields.Char('Reason')
     date = fields.Date('Date')
     user_id = fields.Many2one('res.users', 'User')
@@ -30,6 +31,4 @@ class RentCash(models.Model):
             vals.update({'reason': reason + self._context.get('from_name', ''),
                          'user_id': self.env.user.id})
         res = super(RentCash, self).create(vals)
-        if self._context.get('from_sale', False):
-            {'type': 'ir.actions.act_window_close'}
         return res

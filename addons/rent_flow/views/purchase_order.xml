@@ -19,6 +19,24 @@
 					<br/>
 				</xpath>
 
+				<button name="button_approve" position="after">
+					<button name="open_payment" type="object" states="draft,sent,to approve" string="Payment" class="oe_highlight" groups="purchase.group_purchase_manager"/>
+                </button>
+
+				<page name="purchase_delivery_invoice" position="after">
+                    <page name="cash" string="Payment">
+                        <field name="cash_detail" readonly="1">
+                            <tree>
+                                <field name="cash_type"/>
+                                <field name="cash"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+
+				<field name="amount_total" position="after">
+                    <field name="cash_outstanding" readonly="1" />
+                </field>
 			</field>
 		</record>
     </data>

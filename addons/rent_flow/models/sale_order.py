@@ -6,11 +6,11 @@ import odoo.addons.decimal_precision as dp
 class saleOrder(models.Model):
     _inherit = 'sale.order'
 
-    end_date = fields.Date(string='End Date')
+    end_date = fields.Datetime(string='End Date')
     date_rent = fields.Integer('Days', compute='calculate_days')
     cash_detail = fields.One2many('rent.cash', 'sale_id')
-    cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount', digits=dp.get_precision('Account'))
-    cash_in = fields.Float(string=_('Cash In'), compute='total_balance_amount', digits=dp.get_precision('Account'))
+    cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount', digits=dp.get_precision('Account'), store=True)
+    cash_in = fields.Float(string=_('Cash In'), compute='total_balance_amount', digits=dp.get_precision('Account'), store=True)
     partner_invoice_id = fields.Many2one(required=False)
     partner_shipping_id = fields.Many2one(required=False)
 
@@ -27,7 +27,7 @@ class saleOrder(models.Model):
         for r in self:
             r.date_rent = 1
             if r.end_date:
-                r.date_rent = (self.end_date - self.date_order.date()).days + 1
+                r.date_rent = (self.end_date - self.date_order).days + 1
 
     @api.depends('cash_detail', 'amount_total')
     def total_balance_amount(self):

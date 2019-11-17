@@ -8,7 +8,7 @@ import odoo.addons.decimal_precision as dp
 class EssPurchaseDiscount(models.Model):
     _inherit = 'purchase.order'
 
-    @api.depends('order_line')
+    @api.depends('order_line', 'ws_discount_type')
     def _compute_all_price(self):
         for r in self:
 
@@ -31,10 +31,10 @@ class EssPurchaseDiscount(models.Model):
     ws_discount_percent = fields.Float(string='Whole Bill Discount (%)', digits=dp.get_precision('Discount'),
                                        readonly=True)
 
-    discount_amount = fields.Float(compute='_compute_all_price', digits=dp.get_precision('Account'))
-    amount_untaxed = fields.Float(compute='_compute_all_price')
-    amount_tax = fields.Float(compute='_compute_all_price')
-    amount_total = fields.Float(compute='_compute_all_price')
+    discount_amount = fields.Float(compute='_compute_all_price', digits=dp.get_precision('Account'), store=True)
+    amount_untaxed = fields.Float(compute='_compute_all_price', store=True)
+    amount_tax = fields.Float(compute='_compute_all_price', store=True)
+    amount_total = fields.Float(compute='_compute_all_price', store=True)
 
     def write(self, vals):
         res = super(EssPurchaseDiscount, self).write(vals)

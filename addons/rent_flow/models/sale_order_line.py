@@ -5,7 +5,8 @@ from odoo import fields, api, models, _
 class saleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     is_delivery = fields.Boolean(string="Is a Delivery", default=False)
-
+    date_order = fields.Datetime(related='order_id.date_order')
+    end_date = fields.Datetime(related='order_id.end_date')
 
     @api.onchange('product_id')
     def product_id_change(self):

@@ -12,17 +12,16 @@ class PurchaseOrder(models.Model):
     delivery_rating_success = fields.Boolean(copy=False)
     delivery_set = fields.Boolean(compute='_compute_delivery_state')
     recompute_delivery_price = fields.Boolean('Delivery cost should be recomputed')
-    # is_all_service = fields.Boolean("Service Product", compute="_compute_is_service_products")
-    #
-    # @api.depends('order_line')
-    # def _compute_is_service_products(self):
-    #     for so in self:
-    #         so.is_all_service = all(line.product_id.type == 'service' for line in so.order_line)
+    cash_detail = fields.One2many('rent.cash', 'purchase_id')
+    cash_outstanding = fields.Float(string=_('Balance'), compute='total_balance_amount', digits=dp.get_precision('Account'), store=True)
 
-    def _compute_amount_total_without_delivery(self):
-        self.ensure_one()
-        delivery_cost = sum([l.price_total for l in self.order_line if l.is_delivery])
-        return self.amount_total - delivery_cost
+
+    @api.depends('cash_detail', 'amount_total')
+    def total_balance_amount(self):
+        for r in self:
+            r.cash_outstanding = r.amount_total
+            payment = sum(r.cash_detail.mapped('cash') or [0])
+            r.cash_outstanding = r.amount_total + payment
 
     @api.depends('order_line')
     def _compute_delivery_state(self):
@@ -121,6 +120,19 @@ class PurchaseOrder(models.Model):
             post = u'\N{NO-BREAK SPACE}{symbol}'.format(symbol=self.currency_id.symbol or '')
         return u' {pre}{0}{post}'.format(amount, pre=pre, post=post)
 
+    def open_payment(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'rent.cash',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_purchase_id': self.id,
+                        'from_name': self.name,
+                        'default_cash_type': 'out',
+                        'from_sale': True},
+            'nodestroy': True,
+        }
 
 
 class purchaseOrderLine(models.Model):
