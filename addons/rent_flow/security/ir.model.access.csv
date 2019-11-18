@@ -1,5 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_rent_pricelist_manager,rent.pricelist,model_rent_pricelist,sales_team.group_sale_manager,1,1,1,1
+access_rent_pricelist_sales,rent.pricelist,model_rent_pricelist,sales_team.group_sale_salesman_all_leads,1,1,0,0
 access_rent_pricelist_detail_manager,rent.pricelist.detail,model_rent_pricelist_detail,sales_team.group_sale_manager,1,1,1,1
+access_rent_pricelist_detail_sales,rent.pricelist.detail,model_rent_pricelist_detail,sales_team.group_sale_salesman_all_leads,1,1,0,0
 access_rent_cash_manager,rent.rent.cash,model_rent_cash,sales_team.group_sale_manager,1,1,1,1
+access_rent_cash_sales,rent.rent.cash,model_rent_cash,sales_team.group_sale_salesman_all_leads,1,1,0,0
 access_rent_product_type_manager,rent.product.type,rent_product.model_rent_product_type,sales_team.group_sale_manager,1,1,1,1
