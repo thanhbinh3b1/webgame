@@ -3,7 +3,9 @@ from odoo import fields, api, models
 
 
 class ProductTemplate(models.Model):
-    _inherit = 'product.template'
+    _inherit = "product.template"
+    _order = "default_code, name"
+
 
     rent_type = fields.Many2one('rent.product.type', string='Loai')
 
