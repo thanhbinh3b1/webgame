@@ -11,7 +11,10 @@
                 </field>
 
                 <field name="validity_date" position="attributes">
-                    <attribute name="invisible">1   </attribute>
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_untaxed" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </field>
                  <field name="amount_total" position="after">
                     <field name="cash_outstanding" readonly="1" />
