@@ -1,6 +1,7 @@
 # __author__ = 'BinhTT'
 from odoo import fields, api, models, _
 import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, ValidationError
 
 
 class saleOrder(models.Model):
@@ -49,3 +50,20 @@ class saleOrder(models.Model):
                         'from_sale': True},
             'nodestroy': True,
         }
+
+    
+    def action_confirm(self):
+        if self._get_forbidden_state_confirm() & set(self.mapped('state')):
+            raise UserError(_(
+                'It is not allowed to confirm an order in the following states: %s'
+            ) % (', '.join(self._get_forbidden_state_confirm())))
+
+        for order in self.filtered(lambda order: order.partner_id not in order.message_partner_ids):
+            order.message_subscribe([order.partner_id.id])
+        self.write({
+            'state': 'sale',
+        })
+        self._action_confirm()
+        if self.env.user.has_group('sale.group_auto_done_setting'):
+            self.action_done()
+        return True
