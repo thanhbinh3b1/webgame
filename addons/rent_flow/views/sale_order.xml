@@ -9,6 +9,9 @@
                     <field name="end_date" required="1" />
                     <field name="date_rent" readonly="1" />
                 </field>
+                <field name="date_order" position="attributes">
+                    <attribute name="groups">sales_team.group_sale_salesman</attribute>
+                </field>
 
                 <field name="validity_date" position="attributes">
                     <attribute name="invisible">1</attribute>
