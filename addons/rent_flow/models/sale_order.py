@@ -23,7 +23,7 @@ class saleOrder(models.Model):
     def _compute_delivery_state(self):
             self.delivery_set = True
 
-    @api.depends('end_date')
+    @api.depends('end_date', 'date_order')
     def calculate_days(self):
         for r in self:
             r.date_rent = 1

@@ -12,7 +12,7 @@ class ProductTemplate(models.Model):
     @api.model
     def create(self, vals):
         cate_obj = self.env['product.category'].browse(vals.get('categ_id'))
-        vals.update(default_code=(cate_obj.code or '') + str(cate_obj.sequence))
+        vals.update(default_code=(cate_obj.code or '') + str('%02d' %cate_obj.sequence))
         cate_obj.sequence += 1
         res = super(ProductTemplate, self).create(vals)
 

@@ -124,7 +124,7 @@ class ESSSaleLineDiscount(models.Model):
             self.discount = 0
         else:
             self.discount_amount_manual = 0
-    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id', 'discount_amount_manual')
     def _compute_amount(self):
         """
         Compute the amounts of the SO line.

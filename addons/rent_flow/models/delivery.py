@@ -28,7 +28,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
                 self.delivery_price = vals['price']
                 self.display_price = vals['carrier_price']
                 return {}
-        super(ChooseDeliveryCarrier, self)._get_shipment_rate()
+        return super(ChooseDeliveryCarrier, self)._get_shipment_rate()
 
 
 class RentDeliveryCarrier(models.Model):
