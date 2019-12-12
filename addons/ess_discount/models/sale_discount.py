@@ -31,10 +31,10 @@ class ESSSaleOrderDiscount(models.Model):
     def _compute_all_price(self):
         for r in self:
             r.amount_tax = sum([line.price_tax for line in r.order_line])
-            r.amount_untaxed = sum([line.price_subtotal - line.ws_discount - line.discount_amount_line for line in r.order_line])
+            r.amount_untaxed = sum([line.price_subtotal - line.ws_discount for line in r.order_line])
             r.total_before_discount = sum([line.price_subtotal for line in r.order_line])
             r.amount_total = r.amount_untaxed + r.amount_tax
-            r.amount_discount = r.total_before_discount - r.amount_untaxed
+            r.amount_discount = sum([line.ws_discount for line in r.order_line])
 
 
 
@@ -48,7 +48,7 @@ class ESSSaleOrderDiscount(models.Model):
         for order in self:
             amount_untaxed = amount_tax = 0.0
             for line in order.order_line:
-                amount_untaxed += line.price_subtotal - line.ws_discount  - line.discount_amount_line
+                amount_untaxed += line.price_subtotal - line.ws_discount
                 amount_tax += line.price_tax
             order.update({
                 'amount_untaxed': amount_untaxed,
