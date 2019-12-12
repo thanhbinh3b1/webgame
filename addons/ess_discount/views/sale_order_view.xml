@@ -37,7 +37,7 @@
 				<xpath expr="//field[@name='amount_untaxed']" position="before">
 					<field name="total_before_discount" widget="monetary" options="{'currency_field': 'currency_id'}"
 					readonly="1"/>
-					<field name="amount_discount"/>
+					<field name="amount_discount" invisible="1"/>
 				</xpath>
 			</field>
 		</record>

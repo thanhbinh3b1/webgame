@@ -8,6 +8,10 @@
                 <field name="categ_id" position="after">
                     <field name="rent_type" required="1" widget="selection"/>
                 </field>
+                <xpath expr="//div[@name='standard_price_uom']" position="attributes">
+                    <atribute name="groups">purchase.group_purchase_manager</atribute>
+                </xpath>
+
             </field>
         </record>
         <record id="product_product_only_form_view_inherit" model="ir.ui.view">
