@@ -29,8 +29,9 @@ class saleOrder(models.Model):
             r.date_rent = 1
             if r.end_date:
                 r.date_rent = (self.end_date - self.date_order).days + 1
-            for line in r.order_line:
-                line.product_id_change()
+            if r.state == 'draft':
+                for line in r.order_line:
+                    line.product_id_change()
 
     @api.depends('cash_detail', 'amount_total')
     def total_balance_amount(self):
