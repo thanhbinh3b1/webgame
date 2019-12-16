@@ -11,6 +11,9 @@
                 <xpath expr="//div[@name='standard_price_uom']" position="attributes">
                     <atribute name="groups">purchase.group_purchase_manager</atribute>
                 </xpath>
+                <xpath expr="//page[@name='purchase']" position="attributes">
+                    <atribute name="groups">purchase.group_purchase_manager</atribute>
+                </xpath>
 
             </field>
         </record>
@@ -22,6 +25,9 @@
                 <field name="type" position="after">
                     <field name="rent_type" required="1" widget="selection" />
                 </field>
+                <xpath expr="//page[@name='purchase']" position="attributes">
+                    <atribute name="groups">purchase.group_purchase_manager</atribute>
+                </xpath>
             </field>
         </record>
     </data>
