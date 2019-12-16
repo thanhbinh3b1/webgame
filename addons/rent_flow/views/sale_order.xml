@@ -54,7 +54,7 @@
                          position="replace">
                      <button name="open_payment" string="Payment"
                         type="object"
-                        attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '=', 'done')]}"/>
+                        attrs="{'invisible': [('state', 'in', ('draft','cancel','done'))]}"/>
                 </button>
                 <button name="%(sale.action_view_sale_advance_payment_inv)d"
                          position="replace">

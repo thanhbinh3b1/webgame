@@ -164,3 +164,10 @@ class purchaseOrderLine(models.Model):
 
         undeletable_lines = super()._check_line_unlink()
         return undeletable_lines.filtered(lambda line: not line.is_delivery)
+
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        res = super(purchaseOrderLine, self).onchange_product_id()
+        if self.order_id.partner_id:
+            vendor = self.order_id.partner_id.id
+            return {'domain': {'product_id': [('seller_ids.name', '=', vendor)]}}

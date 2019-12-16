@@ -8,6 +8,9 @@
                 <field name="standard_price" position="attributes">
                     <attribute name="groups">purchase.group_purchase_user</attribute>
                 </field>
+                 <xpath expr="//page[@name='purchase']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager</attribute>
+                </xpath>
             </field>
         </record>
         <record id="rent_product_product_only_form_view_inherit" model="ir.ui.view">
@@ -17,7 +20,11 @@
             <field name="arch" type="xml">
                 <field name="standard_price" position="attributes">
                     <attribute name="groups">purchase.group_purchase_user</attribute>
+                    <attribute name="string">purchase.group_purchase_user</attribute>
                 </field>
+                 <xpath expr="//page[@name='purchase']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager</attribute>
+                </xpath>
             </field>
         </record>
     </data>
