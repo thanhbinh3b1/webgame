@@ -67,6 +67,6 @@ class saleOrder(models.Model):
             'state': 'sale',
         })
         self._action_confirm()
-        if self.env.user.has_group('sale.group_auto_done_setting'):
-            self.action_done()
+        # if self.env.user.has_group('sale.group_auto_done_setting'):
+        #     self.action_done()
         return True
