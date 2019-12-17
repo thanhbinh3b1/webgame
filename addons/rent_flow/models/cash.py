@@ -13,6 +13,7 @@ class RentCash(models.Model):
     reason = fields.Char('Reason')
     date = fields.Date('Date')
     user_id = fields.Many2one('res.users', 'User')
+    payment_term = fields.Many2one('account.payment.term', 'Payment Terms')
 
     def save_payment(self):
         return {'type': 'ir.actions.act_window_close'}

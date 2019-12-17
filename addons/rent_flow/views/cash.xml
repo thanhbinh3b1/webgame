@@ -38,6 +38,7 @@
                             <field name="cash"/>
                         </group>
                         <group>
+                            <field name="payment_term"/>
                             <field name="reason"  invisible="context.get('from_sale', False)"/>
                             <field name="date"  invisible="context.get('from_sale', False)"/>
                             <field name="user_id" invisible="context.get('from_sale', False)"/>
