@@ -58,6 +58,8 @@
                 </button>
                 <button name="%(sale.action_view_sale_advance_payment_inv)d"
                          position="replace">
+                    <button name="%(rent_flow.action_sale_order_excel)d" string="Print"
+                        type="action"/>
                 </button>
             </field>
 

@@ -23,6 +23,7 @@
                     <field name="cash" type="measure"/>
                     <field name="user_id" type="row"/>
                     <field name="cash_type" type="row"/>
+                    <field name="payment_term" type="row"/>
                 </pivot>
             </field>
         </record>

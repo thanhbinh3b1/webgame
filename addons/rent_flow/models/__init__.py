@@ -4,4 +4,5 @@ from . import \
     rent_pricelist, \
     sale_order_line, cash, \
     purchase_order, delivery, \
-    product_product, product_template
+    product_product, product_template, \
+    sale_xlsx

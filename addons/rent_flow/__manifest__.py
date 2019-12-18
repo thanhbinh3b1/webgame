@@ -8,11 +8,12 @@
     'sequence': 60,
     'summary': 'Purchase orders, tenders and agreements',
     'description': "",
-    'depends': ['sale', 'rent_product', 'delivery', 'purchase'],
+    'depends': ['sale', 'rent_product', 'delivery', 'purchase', 'report_xlsx'],
     'data': [
         'security/ir.model.access.csv',
         'views/product_template.xml',
         'views/cash.xml',
+        'views/excel_template.xml',
         'views/sale_order.xml',
         'views/purchase_order.xml',
         'views/rent_pricelist.xml',

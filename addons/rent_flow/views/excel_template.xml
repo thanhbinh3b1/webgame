@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <report
+            string="Sales Order"
+            id="action_sale_order_excel"
+            model="sale.order"
+            report_type="xlsx"
+            name="rent_flow.report_xlsxsaleorder"
+            file="rent_flow.report_xlsxsaleorder"
+            print_report_name="
+                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+                'Sale Order - %s' % (object.name))"
+        />
+    </data>
+</odoo>
