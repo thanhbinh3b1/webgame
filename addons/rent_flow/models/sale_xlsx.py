@@ -131,7 +131,7 @@ class SaleXlsx(models.AbstractModel):
         sheet.merge_range(bottom_start, start + 4, bottom_start, start + 5, 'TỔNG', left_bold)
         sheet.write(bottom_start, start + 6, sum([line.product_uom_qty for line in obj.order_line]), right_bold)
         sheet.merge_range(bottom_start, start + 7, bottom_start, start + 8, '(sản phẩm)', left_normal)
-        sheet.merge_range(bottom_start, start + 9, bottom_start, start + 10, self.discount_total, right_bold)
+        sheet.merge_range(bottom_start, start + 9, bottom_start, start + 10, self.discount_total/2, right_bold)
         sheet.merge_range(bottom_start, start + 11, bottom_start, start + 12, obj.amount_total, right_bold)
         bottom_start += 1
         sheet.merge_range(bottom_start, start + 4, bottom_start, start + 10, 'ĐẶT CỌC', left_bold_double)
