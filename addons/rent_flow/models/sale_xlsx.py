@@ -130,7 +130,7 @@ class SaleXlsx(models.AbstractModel):
         right_bold_double = wb.add_format({**body_font, 'align': 'right', 'num_format': '#,##0', 'top': 6,  'bold': True})
         sheet.merge_range(bottom_start, start + 4, bottom_start, start + 5, 'TỔNG', left_bold)
         sheet.write(bottom_start, start + 6, sum([line.product_uom_qty for line in obj.order_line]), right_bold)
-        sheet.merge_range(bottom_start, start + 7, bottom_start, start + 9, '(sản phẩm)', left_normal)
+        sheet.merge_range(bottom_start, start + 7, bottom_start, start + 8, '(sản phẩm)', left_normal)
         sheet.merge_range(bottom_start, start + 9, bottom_start, start + 10, self.discount_total, right_bold)
         sheet.merge_range(bottom_start, start + 11, bottom_start, start + 12, obj.amount_total, right_bold)
         bottom_start += 1
