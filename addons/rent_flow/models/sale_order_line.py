@@ -10,6 +10,8 @@ class saleOrderLine(models.Model):
 
     @api.onchange('product_id')
     def product_id_change(self):
+        if self.env.context.get('no_compute_price', False):
+            return {}
         product = self.product_id.with_context(
             lang=self.order_id.partner_id.lang,
             partner=self.order_id.partner_id,

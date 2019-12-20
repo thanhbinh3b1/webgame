@@ -3,6 +3,7 @@
 
 from odoo.addons.web.controllers import main as report
 from odoo.http import content_disposition, route, request
+from odoo.tools.safe_eval import safe_eval
 
 import json
 
@@ -14,6 +15,8 @@ class ReportController(report.ReportController):
             report = request.env['ir.actions.report']._get_report_from_name(
                 reportname)
             context = dict(request.env.context)
+            obj = request.env[report.model].browse(int(docids))
+            report_name = safe_eval(report.print_report_name, {'object': obj})
             if docids:
                 docids = [int(i) for i in docids.split(',')]
             if data.get('options'):
@@ -35,7 +38,7 @@ class ReportController(report.ReportController):
                 ('Content-Length', len(xlsx)),
                 (
                     'Content-Disposition',
-                    content_disposition(report.report_file + '.xlsx')
+                    content_disposition((report_name or report.report_file) + '.xlsx')
                 )
             ]
             return request.make_response(xlsx, headers=xlsxhttpheaders)

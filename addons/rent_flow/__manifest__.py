@@ -10,6 +10,7 @@
     'description': "",
     'depends': ['sale', 'rent_product', 'delivery', 'purchase', 'report_xlsx'],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/product_template.xml',
         'views/cash.xml',
