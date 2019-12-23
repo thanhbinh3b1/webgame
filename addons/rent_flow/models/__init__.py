@@ -5,4 +5,4 @@ from . import \
     sale_order_line, cash, \
     purchase_order, delivery, \
     product_product, product_template, \
-    sale_xlsx
+    sale_xlsx, res
