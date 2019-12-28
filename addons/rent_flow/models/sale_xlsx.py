@@ -19,7 +19,7 @@ class SaleXlsx(models.AbstractModel):
             sheet.repeat_rows(0, 6)
             sheet.fit_to_pages(1, 0)
             sheet.set_column(0, 30, 6)  # Width of columns B:D set to 30.
-            sheet.set_footer('&L&P / &N')
+            # sheet.set_footer('&L&P / &N')
 
             sheet.set_landscape()
             self.font = dict(font='Cambria')
@@ -72,7 +72,7 @@ class SaleXlsx(models.AbstractModel):
         label1 = 'SĐT'
         # line3
         sheet.merge_range(line, start, line, start + 2, label1, left_bold)
-        sheet.merge_range(line, start + 3, line, start + 5, obj.partner_id.phone, left_normal)
+        sheet.merge_range(line, start + 3, line, start + 5, obj.partner_id.phone or '', left_normal)
         # sheet.merge_range(line, start + 7, line, start + 9, '&CPage &P of &N', left_bold)
         if start != 0:
             self.line = line
@@ -147,30 +147,43 @@ class SaleXlsx(models.AbstractModel):
         bottom_start += 6
         sheet.merge_range(bottom_start, start, bottom_start, start + 5, obj.partner_id.name, center_bold)
         sheet.merge_range(bottom_start, start + 7, bottom_start, start + 12, self.env.user.name, center_bold)
-        if start == 0:
-            left_bold = wb.add_format({**body_font,'size': 8, 'align': 'left', 'bold': True})
-            left_normal = wb.add_format({**body_font, 'size': 7, 'align': 'top'})
+        # if start == 0:
+        #     left_bold = wb.add_format({**body_font,'size': 8, 'align': 'left', 'bold': True})
+        #     left_normal = wb.add_format({**body_font, 'size': 7, 'align': 'top'})
+        #
+        #     bottom_start += 1
+        #     sheet.merge_range(bottom_start, start, bottom_start, start + 12, 'QUÝ KHÁCH LƯU Ý:', left_bold)
+        #
+        #     bottom_start += 1
+        #     sheet.set_row(bottom_start, 20)
+        sheet.set_footer('&L&P / &N')
+        # sheet.footer = '&L1. Trước khi nhận và thanh toán phải kiểm tra kỹ hàng hoá trước khi ra khỏi cửa hàng. '\
+        #                  '\nNếu có bất kỳ vấn đề nào trên trang phục/phụ kiện, vui lòng báo ngay cho nhân viên'\
+        #                  '\n2. Quý khách vui lòng yêu cầu nhân viên ghi phiếu thu theo đơn và giữ phiếu thu để đối chiếu khi trả hàng.'\
+        #                  '\nPhiếu thu có giá trị tương đương với Cam kết/Thoả thuận/Hợp đồng của 2 bên.'\
+        #                  '\n3. Quý khách chịu trách nhiệm bảo quản trang phục/phụ kiện trong thời gian thuê kể từ khi ký phiếu thu.'\
+        #                  '\n4. Bàn giao trang phục/phụ kiện phải ở trong tình trạng như khi nhận. '\
+        #                  '\nMọi vấn đề phát sinh như: hư hỏng, đứt rời 1 phần, rách, sờn vải, thủng lỗ,cháy tàn thuốc, lem màu, '\
+        #                  '\nsai khác kiểu dáng ban đầu, vết ố bẩn không đi… dù ở bất cứ vị trí nào trên trang phục/phụ kiện,'\
+        #                  '\nhoặc thiếu số lượng nhận ban đầu, '\
+        #                  '\nQuý khách vui lòng bồi hoàn 100% giá trị của sản phẩm đó.'\
+        #                  '\n5. Trả đúng ngày hẹn ghi trên phiếu. Sau thời gian này sẽ phải trả theo phí quy định của cửa hàng:'\
+        #                  '\t\n- Đối với váy/set trang phục: thanh toán theo combo ngày tiếp theo.'\
+        #                  '\t\n- Đối với phụ kiện: theo giá thuê lẻ.'
+        # sheet.set_footer('&L1. Trước khi nhận và thanh toán phải kiểm tra kỹ hàng hoá trước khi ra khỏi cửa hàng. '
+        #                      '\nNếu có bất kỳ vấn đề nào trên trang phục/phụ kiện, vui lòng báo ngay cho nhân viên'
+        #                      '\n2. Quý khách vui lòng yêu cầu nhân viên ghi phiếu thu theo đơn và giữ phiếu thu để đối chiếu khi trả hàng.'
+        #                      '\nPhiếu thu có giá trị tương đương với Cam kết/Thoả thuận/Hợp đồng của 2 bên.'
+        #                      '\n3. Quý khách chịu trách nhiệm bảo quản trang phục/phụ kiện trong thời gian thuê kể từ khi ký phiếu thu.'
+        #                      '\n4. Bàn giao trang phục/phụ kiện phải ở trong tình trạng như khi nhận. '
+        #                      '\nMọi vấn đề phát sinh như: hư hỏng, đứt rời 1 phần, rách, sờn vải, thủng lỗ,cháy tàn thuốc, lem màu, '
+        #                      '\nsai khác kiểu dáng ban đầu, vết ố bẩn không đi… dù ở bất cứ vị trí nào trên trang phục/phụ kiện,'
+        #                      '\nhoặc thiếu số lượng nhận ban đầu, '
+        #                      '\nQuý khách vui lòng bồi hoàn 100% giá trị của sản phẩm đó.'
+        #                      '\n5. Trả đúng ngày hẹn ghi trên phiếu. Sau thời gian này sẽ phải trả theo phí quy định của cửa hàng:'
+        #                           '\t\n- Đối với váy/set trang phục: thanh toán theo combo ngày tiếp theo.'
+        #                           '\t\n- Đối với phụ kiện: theo giá thuê lẻ.', margin=1)
 
-            bottom_start += 1
-            sheet.merge_range(bottom_start, start, bottom_start, start + 12, 'QUÝ KHÁCH LƯU Ý:', left_bold)
 
-            bottom_start += 1
-            sheet.set_row(bottom_start, 20)
-
-            sheet.merge_range(bottom_start, start, bottom_start + 10, start + 12,
-                             '1. Trước khi nhận và thanh toán phải kiểm tra kỹ hàng hoá trước khi ra khỏi cửa hàng. '
-                             '\nNếu có bất kỳ vấn đề nào trên trang phục/phụ kiện, vui lòng báo ngay cho nhân viên'
-                             '\n2. Quý khách vui lòng yêu cầu nhân viên ghi phiếu thu theo đơn và giữ phiếu thu để đối chiếu khi trả hàng.'
-                             '\nPhiếu thu có giá trị tương đương với Cam kết/Thoả thuận/Hợp đồng của 2 bên.'
-                             '\n3. Quý khách chịu trách nhiệm bảo quản trang phục/phụ kiện trong thời gian thuê kể từ khi ký phiếu thu.'
-                             '\n4. Bàn giao trang phục/phụ kiện phải ở trong tình trạng như khi nhận. '
-                             '\nMọi vấn đề phát sinh như: hư hỏng, đứt rời 1 phần, rách, sờn vải, thủng lỗ,cháy tàn thuốc, lem màu, '
-                             '\nsai khác kiểu dáng ban đầu, vết ố bẩn không đi… dù ở bất cứ vị trí nào trên trang phục/phụ kiện,'
-                             '\nhoặc thiếu số lượng nhận ban đầu, '
-                             '\nQuý khách vui lòng bồi hoàn 100% giá trị của sản phẩm đó.'
-                             '\n5. Trả đúng ngày hẹn ghi trên phiếu. Sau thời gian này sẽ phải trả theo phí quy định của cửa hàng:'
-                                  '\t\n- Đối với váy/set trang phục: thanh toán theo combo ngày tiếp theo.'
-                                  '\t\n- Đối với phụ kiện: theo giá thuê lẻ.', left_normal)
-
-
-
+        sheet.header_footer_changed= True
+        sheet._write_header_footer()
