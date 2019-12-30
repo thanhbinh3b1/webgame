@@ -184,6 +184,3 @@ class SaleXlsx(models.AbstractModel):
         #                           '\t\n- Đối với váy/set trang phục: thanh toán theo combo ngày tiếp theo.'
         #                           '\t\n- Đối với phụ kiện: theo giá thuê lẻ.', margin=1)
 
-
-        sheet.header_footer_changed= True
-        sheet._write_header_footer()
